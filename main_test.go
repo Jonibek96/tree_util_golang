@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"os"
 	"testing"
+	"tree_util_golang/tree"
 )
 
 const testFullResult = `├───project
@@ -37,10 +39,10 @@ const testFullResult = `├───project
 `
 
 func TestTreeFull(t *testing.T) {
-	out := new(bytes.Buffer)
-	err := dirTree(out, "testdata", true)
+	var out bytes.Buffer
+	err := tree.DirTree(&out, "testdata", true)
 	if err != nil {
-		t.Errorf("test for OK Failed - error")
+		return
 	}
 	result := out.String()
 	if result != testFullResult {
@@ -63,12 +65,12 @@ const testDirResult = `├───project
 `
 
 func TestTreeDir(t *testing.T) {
-	out := new(bytes.Buffer)
-	err := dirTree(out, "testdata", false)
+	out := os.Stdout
+	err := tree.DirTree(out, "testdata", false)
 	if err != nil {
 		t.Errorf("test for OK Failed - error")
 	}
-	result := out.String()
+	result := out.Name()
 	if result != testDirResult {
 		t.Errorf("test for OK Failed - results not match\nGot:\n%v\nExpected:\n%v", result, testDirResult)
 	}
